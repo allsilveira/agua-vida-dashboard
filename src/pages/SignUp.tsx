@@ -1,50 +1,56 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
-import { GlassWater, Icon, Loader2 } from 'lucide-react';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { GlassWater, Icon, Loader2 } from "lucide-react";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
-    full_name: '',
-    email: '',
-    password: '',
-    phone: '',
-    street: '',
-    number: '',
-    complement: '',
-    neighborhood: '',
-    city: '',
-    state: '',
-    zip_code: '',
+    full_name: "",
+    email: "",
+    password: "",
+    phone: "",
+    street: "",
+    number: "",
+    complement: "",
+    neighborhood: "",
+    city: "",
+    state: "",
+    zip_code: "",
     opening_hours: {
       start: null,
-      end: null
-    }
+      end: null,
+    },
   });
   const [isLoading, setIsLoading] = useState(false);
   const { signup } = useAuth();
   const { toast } = useToast();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }));
   };
 
   const handleChangeOpenHours = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       opening_hours: {
         ...prev.opening_hours,
-        [name]: Number(value)
-      }
+        [name]: Number(value),
+      },
     }));
   };
 
@@ -67,18 +73,23 @@ export default function SignUp() {
         zip_code: formData.zip_code,
         opening_hours: {
           start: formData.opening_hours.start,
-          end: formData.opening_hours.end
-        }
+          end: formData.opening_hours.end,
+        },
       });
       toast({
-        title: 'Cadastro realizado!',
-        description: 'Sua conta foi criada com sucesso.',
+        title: "Cadastro realizado!",
+        description: "Sua conta foi criada com sucesso.",
       });
     } catch (error) {
+      console.log(error);
+      const description =
+        error.response?.data?.issues?.[0]?.message ??
+        error.response?.data?.message ??
+        "Tente novamente mais tarde.";
       toast({
-        title: 'Erro ao cadastrar',
-        description: 'Tente novamente mais tarde.',
-        variant: 'destructive',
+        title: "Erro ao cadastrar",
+        description,
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -92,7 +103,9 @@ export default function SignUp() {
           <div className="mx-auto w-16 h-16 bg-gradient-to-br from-primary  rounded-2xl flex items-center justify-center">
             <GlassWater className="w-8 h-8 text-primary-foreground" />
           </div>
-          <CardTitle className="text-2xl font-bold">Cadastre-se no Água Vida Dash</CardTitle>
+          <CardTitle className="text-2xl font-bold">
+            Cadastre-se no Água Vida Dash
+          </CardTitle>
           <CardDescription>
             Crie sua conta e comece a gerenciar seus produtos
           </CardDescription>
@@ -289,12 +302,15 @@ export default function SignUp() {
                   Cadastrando...
                 </>
               ) : (
-                'Criar Conta'
+                "Criar Conta"
               )}
             </Button>
             <p className="text-center text-sm text-muted-foreground">
-              Já tem uma conta?{' '}
-              <Link to="/login" className="text-primary hover:underline font-medium">
+              Já tem uma conta?{" "}
+              <Link
+                to="/login"
+                className="text-primary hover:underline font-medium"
+              >
                 Faça login
               </Link>
             </p>
