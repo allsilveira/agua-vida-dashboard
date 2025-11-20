@@ -1,4 +1,4 @@
-# 🚀 Agua Vida – Dashboard do Vendedor
+# 🚀 Água Vida – Dashboard do Vendedor
 
 Este é o Painel Administrativo do **Agua Vida**, uma aplicação web onde vendedores podem **gerenciar seu catálogo de produtos**, **atualizar informações pessoais**, **configurar endereço de entrega** e **alterar sua senha de acesso**.
 
