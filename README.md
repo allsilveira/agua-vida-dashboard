@@ -1,8 +1,8 @@
 # 🚀 Água Vida – Dashboard do Vendedor
 
-Este é o Painel Administrativo do **Agua Vida**, uma aplicação web onde vendedores podem **gerenciar seu catálogo de produtos**, **atualizar informações pessoais**, **configurar endereço de entrega** e **alterar sua senha de acesso**.
+Este é o Painel Administrativo do **Água Vida**, uma aplicação web onde vendedores podem **gerenciar seu catálogo de produtos**, **atualizar informações pessoais**, **configurar endereço de entrega** e **alterar sua senha de acesso**.
 
-O dashboard foi desenvolvido com **React + Vite + TypeScript** e utiliza **Clean Architecture**, componentes do **shadcn/ui**, autenticação com **JWT** e integração direta com a API oficial do sistema Agua Vida.
+O dashboard foi desenvolvido com **React + Vite + TypeScript** e utiliza **Clean Architecture**, componentes do **shadcn/ui**, autenticação com **JWT** e integração direta com a API oficial do sistema Água Vida.
 
 ---
 
