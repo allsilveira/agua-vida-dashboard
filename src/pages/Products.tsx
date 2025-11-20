@@ -1,14 +1,27 @@
-import { useEffect, useState } from 'react';
-import { DashboardLayout } from '@/components/DashboardLayout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useToast } from '@/hooks/use-toast';
-import { Plus, Pencil, Trash2, Loader2 } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import { DashboardLayout } from "@/components/DashboardLayout";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
+import { Plus, Pencil, Trash2, Loader2 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import axios from "axios";
 
 interface Product {
   id: string;
@@ -20,9 +33,9 @@ interface Product {
 export default function Products() {
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
   const serviceUnavailable = {
-    title: 'Serviço indisponível',
-    description: 'Tente novamente mais tarde',
-  }
+    title: "Serviço indisponível",
+    description: "Tente novamente mais tarde",
+  };
   const { toast } = useToast();
   const { user } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
@@ -30,31 +43,31 @@ export default function Products() {
   const [isLoading, setIsLoading] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [formData, setFormData] = useState({
-    id: '',
-    name: '',
-    price: '',
-    description: ''
+    id: "",
+    name: "",
+    price: "",
+    description: "",
   });
 
   useEffect(() => {
-    setIsLoading(true)
+    setIsLoading(true);
     axios
       .get(`${apiBaseUrl}/product/seller`, { withCredentials: true })
       .then((resp) => {
-        setProducts(resp.data)
+        setProducts(resp.data);
       })
       .catch((error) => {
         toast(serviceUnavailable);
       })
       .finally(() => {
-        setIsLoading(false)
-      })
-  }, [])
+        setIsLoading(false);
+      });
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }));
   };
 
@@ -66,18 +79,24 @@ export default function Products() {
       try {
         await axios.put(
           `${apiBaseUrl}/product`,
-          { ...formData, price: parseFloat(formData.price), id: editingProduct.id },
+          {
+            ...formData,
+            price: parseFloat(formData.price),
+            id: editingProduct.id,
+          },
           { withCredentials: true }
-        )
+        );
 
-        setProducts(prev => prev.map(p =>
-          p.id === editingProduct.id
-            ? { ...p, ...formData, price: parseFloat(formData.price) }
-            : p
-        ));
+        setProducts((prev) =>
+          prev.map((p) =>
+            p.id === editingProduct.id
+              ? { ...p, ...formData, price: parseFloat(formData.price) }
+              : p
+          )
+        );
         toast({
-          title: 'Produto atualizado!',
-          description: 'As alterações foram salvas com sucesso.',
+          title: "Produto atualizado!",
+          description: "As alterações foram salvas com sucesso.",
         });
       } catch (error) {
         toast(serviceUnavailable);
@@ -91,15 +110,13 @@ export default function Products() {
       };
 
       try {
-        await axios.post(
-          `${apiBaseUrl}/product`,
-          newProduct,
-          { withCredentials: true }
-        )
-        setProducts(prev => [...prev, newProduct]);
+        await axios.post(`${apiBaseUrl}/product`, newProduct, {
+          withCredentials: true,
+        });
+        setProducts((prev) => [...prev, newProduct]);
         toast({
-          title: 'Produto criado!',
-          description: 'Novo produto adicionado com sucesso.',
+          title: "Produto criado!",
+          description: "Novo produto adicionado com sucesso.",
         });
       } catch (error) {
         toast(serviceUnavailable);
@@ -107,7 +124,7 @@ export default function Products() {
     }
     setIsLoading(false);
     setIsOpen(false);
-    setFormData({ id: '', name: '', price: '', description: '' });
+    setFormData({ id: "", name: "", price: "", description: "" });
     setEditingProduct(null);
   };
 
@@ -117,7 +134,7 @@ export default function Products() {
       id: product.id,
       name: product.name,
       price: product.price.toString(),
-      description: product.description
+      description: product.description,
     });
     setIsOpen(true);
   };
@@ -126,25 +143,26 @@ export default function Products() {
     setIsLoading(true);
 
     try {
-      await axios.delete(`${apiBaseUrl}/product/${id}`, { withCredentials: true })
-      setProducts(prev => prev.filter(p => p.id !== id));
+      await axios.delete(`${apiBaseUrl}/product/${id}`, {
+        withCredentials: true,
+      });
+      setProducts((prev) => prev.filter((p) => p.id !== id));
       toast({
-        title: 'Produto removido',
-        description: 'O produto foi excluído com sucesso.',
+        title: "Produto removido",
+        description: "O produto foi excluído com sucesso.",
       });
     } catch (error) {
       toast(serviceUnavailable);
     } finally {
       setIsLoading(false);
     }
-
   };
 
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
     if (!open) {
       setEditingProduct(null);
-      setFormData({ id: '', name: '', price: '', description: '' });
+      setFormData({ id: "", name: "", price: "", description: "" });
     }
   };
 
@@ -159,7 +177,7 @@ export default function Products() {
             </p>
           </div>
           <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-            <DialogTrigger asChild className='w-full md:w-auto'>
+            <DialogTrigger asChild className="w-full md:w-auto">
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
                 Novo Produto
@@ -168,13 +186,12 @@ export default function Products() {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>
-                  {editingProduct ? 'Editar Produto' : 'Novo Produto'}
+                  {editingProduct ? "Editar Produto" : "Novo Produto"}
                 </DialogTitle>
                 <DialogDescription>
                   {editingProduct
-                    ? 'Altere as informações do produto'
-                    : 'Adicione um novo produto ao seu catálogo'
-                  }
+                    ? "Altere as informações do produto"
+                    : "Adicione um novo produto ao seu catálogo"}
                 </DialogDescription>
               </DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -183,7 +200,7 @@ export default function Products() {
                   <Input
                     id="name"
                     name="name"
-                    placeholder="Botijão P13 - 13kg"
+                    placeholder="Bombona de Água - 20L"
                     value={formData.name}
                     onChange={handleChange}
                     required
@@ -209,7 +226,7 @@ export default function Products() {
                     name="price"
                     type="number"
                     step="0.01"
-                    placeholder="95.00"
+                    placeholder="15.00"
                     value={formData.price}
                     onChange={handleChange}
                     required
@@ -232,8 +249,10 @@ export default function Products() {
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         Salvando...
                       </>
+                    ) : editingProduct ? (
+                      "Salvar Alterações"
                     ) : (
-                      editingProduct ? 'Salvar Alterações' : 'Criar Produto'
+                      "Criar Produto"
                     )}
                   </Button>
                 </div>
